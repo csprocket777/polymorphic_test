@@ -1,3 +1,19 @@
-<h2 id="title">Welcome to Ember.js</h2>
+<h2 id="title">Testing polymorphic has-many relations on first save</h2>
+<p>
+	Change the value in the dropdown below and then click save.
+</p>
+<h5>
+    {{view "select"
+        content=recordPhases
+        optionLabelPath="content.title"
+        optionValuePath="content.id"
+        selection=currentSelectedPhase
+        prompt="Select a record phase"
+    }}
+    
+</h5>
 
-{{outlet}}
+<h5>Currently Stored in record: {{currentRecord.values.firstObject.title}}</h5>
+
+
+<button {{action "save"}}>Save</button>

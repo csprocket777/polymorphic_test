@@ -18,6 +18,112 @@
     {{content-for 'body'}}
 
     <script src="assets/vendor.js"></script>
+    
+    <script type="application/javascript">        
+        var recordFieldValues = {
+            '1': {
+                id: 1,
+                values:[
+                    {
+                        id: 1,
+                        type: 'record-phase'
+                    }
+                ]
+            }
+        };
+        
+        
+        var recordPhases = {
+            '1': {
+                id: 1,
+                title: 'Phase 1'
+            },
+            '2': {
+                id: 2,
+                title: 'Phase 2'
+            },
+            '3': {
+                id: 3,
+                title: 'Phase 3'
+            }
+        };
+
+        
+          var server = new Pretender(function(){
+            this.get('/recordFieldValues', function(request){
+                return [
+                    200, 
+                    {"Content-Type":"application/json"}, 
+                    JSON.stringify(
+                        {
+                            "record-field-values":Object.keys(recordFieldValues).map(function(k){return recordFieldValues[k]})
+                        }
+                        )
+                    ];
+            });
+
+            this.get('/recordFieldValues/:id', function(request){
+                return [
+                    200, 
+                    {"Content-Type":"application/json"}, 
+                    JSON.stringify(
+                        {
+                            'record-field-value':recordFieldValues[request.params.id]
+                        }
+                        )
+                    ];
+            });
+
+            this.put('/recordFieldValues/:id', function(request){
+                var requestBody = JSON.parse(request.requestBody);
+
+                var ret = recordFieldValues[request.params.id];
+                    ret.values[0] = {
+                        id: requestBody.recordFieldValue.values[0], 
+                        type:'record-phase'
+                    };
+
+                return [
+                    200, 
+                    {"Content-Type":"application/json"}, 
+                    JSON.stringify(
+                        {
+                            'record-field-value':ret
+                        }
+                        )
+                    ];
+            });
+
+
+
+
+            this.get('/recordPhases', function(request){
+                return [
+                        200, 
+                        {"Content-Type":"application/json"}, 
+                        JSON.stringify(
+                            {
+                                "recordPhases":Object.keys(recordPhases).map(function(k){return recordPhases[k]})
+                            }
+                            )
+                        ];
+            });
+
+
+            this.get('/recordPhases/:id', function(request){
+                return [
+                        200, 
+                        {"Content-Type":"application/json"}, 
+                        JSON.stringify(
+                            {
+                                'record-phase':recordPhases[request.params.id]
+                            }
+                            )
+                        ];
+            });
+          });
+    </script>
+
     <script src="assets/polymorphic-test.js"></script>
 
     {{content-for 'body-footer'}}
